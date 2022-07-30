@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="kr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>가위바위보</title>
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+                text-align: center;
+                line-height: 1.45;
+            }
+            input {
+                margin-bottom: 30px;
+            }
+
+            .selections {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+            }
+
+            .selection {
+                background: rgb(230, 230, 230);
+                min-height: 50px;
+                padding: 10px;
+                border-radius: 5px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                min-width: 50px;
+                cursor: pointer;
+            }
+
+            .selected {
+                background: black;
+                color: white;
+            }
+
+            .mySelect {
+                color: black;
+                line-height: 1.5;
+            }
+            .iwin {
+                color: red;
+            }
+            a {
+                display: block;
+                margin-top: 80px;
+                font-size: 0.8em;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>
+            가위바위보를 시작하려면<br />
+            아래 버튼을 눌러주세요.
+        </h1>
+        <input type="button" value="가위바위보 시작하기" />
+        <h1 class="message"></h1>
+        <h2 class="mySelect"></h2>
+        <h2 class="yourSelect"></h2>
+        <div class="selections">
+            <div class="selection scissors">가위</div>
+            <div class="selection rock">바위</div>
+            <div class="selection paper">보</div>
+        </div>
+
+        <script>
+            const selections = document.querySelectorAll('.selection');
+            const message = document.querySelector('.message');
+            const mySelect = document.querySelector('.mySelect');
+            const yourSelect = document.querySelector('.yourSelect');
+
+            function reTry() {
+                document.querySelector('input').value = '다시 도전하세요.';
+            }
+
+            function select(e) {
+                selections.forEach((sel) => {
+                    sel.classList.remove('selected');
+                });
+                e.currentTarget.classList.add('selected');
+            }
+
+            document.querySelector('input').addEventListener('click', () => {
+                selections.forEach((sel) => {
+                    sel.classList.remove('selected');
+                });
+                selections.forEach((selection) => {
+                    selection.addEventListener('click', select);
+                });
+                message.innerText = `안내면 진다`;
+                setTimeout(() => {
+                    message.innerText += ` 가위`;
+                }, 1000);
+                setTimeout(() => {
+                    message.innerText += ` 바위`;
+                    console.log('바위');
+                }, 1500);
+                setTimeout(() => {
+                    message.innerText += ` 보`;
+                    console.log('보');
+
+                    const selected = document.querySelector('.selected');
+                    if (!selected) {
+                        let mine = Math.floor(Math.random() * 3);
+                        if (mine < 1) {
+                            mine = '가위';
+                        } else if (mine < 2) {
+                            mine = '바위';
+                        } else if (mine < 3) {
+                            mine = '보';
+                        }
+                        mySelect.innerHTML = `
+                        저의 선택은 <span class='iwin'>${mine}</span>입니다. <br>
+                        안냈으므로 당신의 패배입니다. <br>
+                        <a href='https://paypal.me/rockpaperscissorsgod/1' target="_blank">돈을 보내세요.</a>
+                        `;
+                    } else {
+                        switch (selected.innerText) {
+                            case `가위`:
+                                mySelect.innerHTML = `저의 선택은 <span class='iwin'>바위</span> 입니다.<br>
+                                당신의 패배입니다. <br>
+                                <a href='https://paypal.me/rockpaperscissorsgod/1' target="_blank">돈을 보내세요.</a>`;
+                                break;
+                            case `바위`:
+                                mySelect.innerHTML = `저의 선택은  <span class='iwin'보</span> 입니다.<br>
+                                당신의 패배입니다. <br>
+                                <a href='https://paypal.me/rockpaperscissorsgod/1' target="_blank">돈을 보내세요.</a>`;
+                                break;
+                            case `보`:
+                                mySelect.innerHTML = `저의 선택은  <span class='iwin'가위</span> 입니다.<br>
+                                당신의 패배입니다. <br>
+                                <a href='https://paypal.me/rockpaperscissorsgod/1' target="_blank">돈을 보내세요.</a>`;
+                                break;
+                        }
+
+                        selections.forEach((selection) => {
+                            selection.removeEventListener('click', select);
+                        });
+                    }
+                }, 2000);
+            });
+        </script>
+    </body>
+</html>
